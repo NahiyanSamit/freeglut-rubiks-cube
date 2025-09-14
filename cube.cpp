@@ -263,8 +263,22 @@ void RubiksCube::draw() {
             }
         }
         
-        // Draw the animated layer
-        float angle = currentAnimation.clockwise ? currentAnimation.currentAngle : -currentAnimation.currentAngle;
+        // Draw the animated layer with corrected angle direction for each axis
+        float angle;
+        switch (currentAnimation.axis) {
+            case 0: // X-axis - needs sign flip for visual consistency
+                angle = currentAnimation.clockwise ? -currentAnimation.currentAngle : currentAnimation.currentAngle;
+                break;
+            case 1: // Y-axis - original direction is correct
+                angle = currentAnimation.clockwise ? currentAnimation.currentAngle : -currentAnimation.currentAngle;
+                break;
+            case 2: // Z-axis - needs sign flip for visual consistency
+                angle = currentAnimation.clockwise ? -currentAnimation.currentAngle : currentAnimation.currentAngle;
+                break;
+            default:
+                angle = currentAnimation.clockwise ? currentAnimation.currentAngle : -currentAnimation.currentAngle;
+                break;
+        }
         drawAnimatedLayer(currentAnimation.origin, currentAnimation.axis, angle);
     } else {
         // No animation - draw all cubies normally
