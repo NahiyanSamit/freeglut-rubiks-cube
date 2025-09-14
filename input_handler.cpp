@@ -67,7 +67,7 @@ void handleKeyboard(unsigned char key, int x, int y) {
         case 'r':
         case 'R':
             resetCube();
-            cout << "Camera reset!" << endl;
+            cout << "Camera and cube reset!" << endl;
             glutPostRedisplay();
             break;
             
@@ -104,7 +104,6 @@ void handleKeyboard(unsigned char key, int x, int y) {
             if (rubiksCube && !currentAnimation.active) {
                 startLayerAnimation(rubiksCube->leftOrigin, 0, true);
                 cout << "Rotating left layer clockwise" << endl;
-                glutPostRedisplay();
             }
             break;
             
@@ -143,91 +142,78 @@ void handleKeyboard(unsigned char key, int x, int y) {
                 startLayerAnimation(rubiksCube->backOrigin, 2, true);
                 cout << "Rotating back layer clockwise" << endl;
             }
-            if (rubiksCube) {
-                rubiksCube->rotateLayer(rubiksCube->backOrigin, 2, true);
-                cout << "Rotating back layer clockwise" << endl;
-                glutPostRedisplay();
-            }
             break;
         
         // Counter-clockwise rotations (uppercase variations or different keys)
         case 'q':
         case 'Q':
             // Rotate top layer counter-clockwise
-            if (rubiksCube) {
-                rubiksCube->rotateLayer(rubiksCube->topOrigin, 1, false);
+            if (rubiksCube && !currentAnimation.active) {
+                startLayerAnimation(rubiksCube->topOrigin, 1, false);
                 cout << "Rotating top layer counter-clockwise" << endl;
-                glutPostRedisplay();
             }
             break;
             
         case 'w':
         case 'W':
             // Rotate middle horizontal layer counter-clockwise
-            if (rubiksCube) {
-                rubiksCube->rotateLayer(rubiksCube->middleOrigin, 1, false);
+            if (rubiksCube && !currentAnimation.active) {
+                startLayerAnimation(rubiksCube->middleOrigin, 1, false);
                 cout << "Rotating middle horizontal layer counter-clockwise" << endl;
-                glutPostRedisplay();
             }
             break;
             
         case 'e':
         case 'E':
             // Rotate bottom layer counter-clockwise
-            if (rubiksCube) {
-                rubiksCube->rotateLayer(rubiksCube->bottomOrigin, 1, false);
+            if (rubiksCube && !currentAnimation.active) {
+                startLayerAnimation(rubiksCube->bottomOrigin, 1, false);
                 cout << "Rotating bottom layer counter-clockwise" << endl;
-                glutPostRedisplay();
             }
             break;
             
         case 'a':
         case 'A':
             // Rotate left layer counter-clockwise
-            if (rubiksCube) {
-                rubiksCube->rotateLayer(rubiksCube->leftOrigin, 0, false);
+            if (rubiksCube && !currentAnimation.active) {
+                startLayerAnimation(rubiksCube->leftOrigin, 0, false);
                 cout << "Rotating left layer counter-clockwise" << endl;
-                glutPostRedisplay();
             }
             break;
             
         case 's':
         case 'S':
             // Rotate middle vertical layer counter-clockwise
-            if (rubiksCube) {
-                rubiksCube->rotateLayer(rubiksCube->centerOrigin, 0, false);
+            if (rubiksCube && !currentAnimation.active) {
+                startLayerAnimation(rubiksCube->centerOrigin, 0, false);
                 cout << "Rotating middle vertical layer counter-clockwise" << endl;
-                glutPostRedisplay();
             }
             break;
             
         case 'd':
         case 'D':
             // Rotate right layer counter-clockwise
-            if (rubiksCube) {
-                rubiksCube->rotateLayer(rubiksCube->rightOrigin, 0, false);
+            if (rubiksCube && !currentAnimation.active) {
+                startLayerAnimation(rubiksCube->rightOrigin, 0, false);
                 cout << "Rotating right layer counter-clockwise" << endl;
-                glutPostRedisplay();
             }
             break;
             
         case 't':
         case 'T':
             // Rotate front layer counter-clockwise
-            if (rubiksCube) {
-                rubiksCube->rotateLayer(rubiksCube->frontOrigin, 2, false);
+            if (rubiksCube && !currentAnimation.active) {
+                startLayerAnimation(rubiksCube->frontOrigin, 2, false);
                 cout << "Rotating front layer counter-clockwise" << endl;
-                glutPostRedisplay();
             }
             break;
             
         case 'y':
         case 'Y':
             // Rotate back layer counter-clockwise
-            if (rubiksCube) {
-                rubiksCube->rotateLayer(rubiksCube->backOrigin, 2, false);
+            if (rubiksCube && !currentAnimation.active) {
+                startLayerAnimation(rubiksCube->backOrigin, 2, false);
                 cout << "Rotating back layer counter-clockwise" << endl;
-                glutPostRedisplay();
             }
             break;
             
@@ -244,6 +230,9 @@ void handleKeyboard(unsigned char key, int x, int y) {
 void resetCube() {
     if (camera) {
         camera->reset();
+    }
+    if (rubiksCube) {
+        rubiksCube->resetCube();
     }
 }
 

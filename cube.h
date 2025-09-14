@@ -52,6 +52,7 @@ public:
 
     void draw();
     void initializeCube();
+    void resetCube();
 
     // Origins
     point3f topOrigin = point3f(0.0f, 1.0f, 0.0f);

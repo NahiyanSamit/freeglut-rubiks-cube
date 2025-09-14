@@ -471,4 +471,34 @@ void RubiksCube::drawWithAnimation() {
     // We'll draw non-rotating cubies normally and rotating cubies with animation
 }
 
+void RubiksCube::resetCube() {
+    // Reset all cubies to their initial positions and colors
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                if (cube[i][j][k] != nullptr) {
+                    // Reset position to original grid position
+                    float x = (i - 1) * 1.1f;
+                    float y = (j - 1) * 1.1f;
+                    float z = (k - 1) * 1.1f;
+                    cube[i][j][k]->position = point3f(x, y, z);
+                    
+                    // Reset colors to initial solved state
+                    cube[i][j][k]->colors[0] = WHITE;   // Front
+                    cube[i][j][k]->colors[1] = YELLOW;  // Back
+                    cube[i][j][k]->colors[2] = RED;     // Left
+                    cube[i][j][k]->colors[3] = ORANGE;  // Right
+                    cube[i][j][k]->colors[4] = BLUE;    // Top
+                    cube[i][j][k]->colors[5] = GREEN;   // Bottom
+                }
+            }
+        }
+    }
+    
+    // Also stop any active animation
+    extern LayerAnimation currentAnimation;
+    currentAnimation.active = false;
+    currentAnimation.currentAngle = 0;
+}
+
 
