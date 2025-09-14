@@ -165,10 +165,54 @@ void RubiksCube::initializeCube() {
 }
 
 void RubiksCube::draw() {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            for (int k = 0; k < 3; k++) {
-                cube[i][j][k]->draw();
+    // Check if there's an active animation
+    extern LayerAnimation currentAnimation;
+    
+    if (currentAnimation.active) {
+        // Draw non-rotating cubies normally
+        float tolerance = 0.6f;
+        
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    if (cube[i][j][k] != nullptr) {
+                        Cubie* cubie = cube[i][j][k];
+                        bool inLayer = false;
+                        
+                        // Check if cubie is in the animated layer
+                        switch (currentAnimation.axis) {
+                            case 0: // X-axis rotation
+                                inLayer = (fabs(cubie->position.x - currentAnimation.origin.x) < tolerance);
+                                break;
+                            case 1: // Y-axis rotation
+                                inLayer = (fabs(cubie->position.y - currentAnimation.origin.y) < tolerance);
+                                break;
+                            case 2: // Z-axis rotation
+                                inLayer = (fabs(cubie->position.z - currentAnimation.origin.z) < tolerance);
+                                break;
+                        }
+                        
+                        // Draw cubie normally if it's not in the animated layer
+                        if (!inLayer) {
+                            cubie->draw();
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Draw the animated layer
+        float angle = currentAnimation.clockwise ? currentAnimation.currentAngle : -currentAnimation.currentAngle;
+        drawAnimatedLayer(currentAnimation.origin, currentAnimation.axis, angle);
+    } else {
+        // No animation - draw all cubies normally
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    if (cube[i][j][k] != nullptr) {
+                        cube[i][j][k]->draw();
+                    }
+                }
             }
         }
     }
@@ -292,6 +336,74 @@ void RubiksCube::rotateLayer(point3f origin, int axis, bool clockwise) {
     
     // Update the main cube array
     cube = newCube;
+}
+
+void RubiksCube::drawAnimatedLayer(point3f origin, int axis, float angle) {
+    // Find all cubies that belong to this layer
+    std::vector<Cubie*> layerCubies;
+    float tolerance = 0.6f;
+    
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                if (cube[i][j][k] != nullptr) {
+                    Cubie* cubie = cube[i][j][k];
+                    bool inLayer = false;
+                    
+                    // Check if cubie is in the layer based on axis
+                    switch (axis) {
+                        case 0: // X-axis rotation (around vertical line through origin)
+                            inLayer = (fabs(cubie->position.x - origin.x) < tolerance);
+                            break;
+                        case 1: // Y-axis rotation (around horizontal line through origin)
+                            inLayer = (fabs(cubie->position.y - origin.y) < tolerance);
+                            break;
+                        case 2: // Z-axis rotation (around depth line through origin)
+                            inLayer = (fabs(cubie->position.z - origin.z) < tolerance);
+                            break;
+                    }
+                    
+                    if (inLayer) {
+                        layerCubies.push_back(cubie);
+                    }
+                }
+            }
+        }
+    }
+    
+    // Draw the rotating layer with animation
+    glPushMatrix();
+    
+    // Move to origin point
+    glTranslatef(origin.x, origin.y, origin.z);
+    
+    // Apply rotation
+    switch (axis) {
+        case 0: // X-axis
+            glRotatef(angle, 1.0f, 0.0f, 0.0f);
+            break;
+        case 1: // Y-axis
+            glRotatef(angle, 0.0f, 1.0f, 0.0f);
+            break;
+        case 2: // Z-axis
+            glRotatef(angle, 0.0f, 0.0f, 1.0f);
+            break;
+    }
+    
+    // Move back from origin
+    glTranslatef(-origin.x, -origin.y, -origin.z);
+    
+    // Draw all cubies in the layer
+    for (Cubie* cubie : layerCubies) {
+        cubie->draw();
+    }
+    
+    glPopMatrix();
+}
+
+void RubiksCube::drawWithAnimation() {
+    // This will be called from input_handler when there's an active animation
+    // We'll draw non-rotating cubies normally and rotating cubies with animation
 }
 
 

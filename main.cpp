@@ -16,6 +16,9 @@ void display() {
         camera->apply();
     }
     
+    // Update animations
+    updateLayerAnimation();
+    
     // Draw the Rubik's cube
     if (rubiksCube) {
         rubiksCube->draw();
@@ -24,11 +27,11 @@ void display() {
     glutSwapBuffers();
 }
 
-// void timer(int value) {
-//     updateLayerRotation();
-    
-//     glutTimerFunc(16, timer, 0); 
-// }
+void timer(int value) {
+    // Continuous timer for smooth animation
+    glutPostRedisplay();
+    glutTimerFunc(16, timer, 0); // ~60 FPS
+}
 
 void initGL() {
     glEnable(GL_DEPTH_TEST);
@@ -92,7 +95,7 @@ int main(int argc, char** argv) {
     glutKeyboardFunc(keyboard);
     
     // Set timer for smooth animations
-    // glutTimerFunc(16, timer, 0);
+    glutTimerFunc(16, timer, 0);
     
     glutMainLoop();
     

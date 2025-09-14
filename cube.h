@@ -26,6 +26,19 @@ struct Cubie
     void draw();
 };
 
+struct LayerAnimation {
+    bool active;
+    point3f origin;     
+    int axis;           
+    bool clockwise;     
+    float currentAngle; 
+    float targetAngle;  // This member is missing in cube.h
+    float speed;        // This member is missing in cube.h
+    
+    LayerAnimation() : active(false), origin(0,0,0), axis(0), clockwise(true), 
+                      currentAngle(0), targetAngle(90), speed(3.0f) {}
+};
+
 // Main Rubik's cube class (simplified - no rotation methods)
 class RubiksCube
 {
@@ -50,6 +63,8 @@ public:
     point3f backOrigin = point3f(0.0f, 0.0f, -1.0f);
 
     void rotateLayer(point3f origin, int axis, bool clockwise);
+    void drawAnimatedLayer(point3f origin, int axis, float angle);
+    void drawWithAnimation();
 };
 
 extern RubiksCube *rubiksCube;
