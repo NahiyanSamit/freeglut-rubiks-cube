@@ -21,19 +21,81 @@ float colors[6][3] = {
 
 // Cubie implementation
 Cubie::Cubie(float px, float py, float pz) : position{px, py, pz} {
-    // Initialize colors based on position
+    
+    colors[0] = WHITE;  
+    colors[1] = YELLOW;  
+    colors[2] = RED;     
+    colors[3] = ORANGE;  
+    colors[4] = BLUE;    
+    colors[5] = GREEN;   
+}
+
+void Cubie::rotateFaceColors(int axis, bool clockwise) {
+    // When a cubie physically rotates, its face colors need to rotate to new face positions
+    // This maps how colors move between face positions during rotation
+    int temp[6];
     for (int i = 0; i < 6; i++) {
-        colors[i] = -1; // No color initially
+        temp[i] = colors[i];
     }
     
-    // Assign colors based on position
-    if (position.z > 0.5f) colors[0] = WHITE;   // Front face
-    if (position.z < -0.5f) colors[1] = YELLOW; // Back face
-    if (position.x < -0.5f) colors[2] = RED;    // Left face
-    if (position.x > 0.5f) colors[3] = ORANGE;  // Right face
-    if (position.y > 0.5f) colors[4] = BLUE;    // Top face
-    if (position.y < -0.5f) colors[5] = GREEN;  // Bottom face
+    switch (axis) {
+        case 0: // X-axis rotation (left/right layers)
+            if (clockwise) {
+                // Front->Top, Top->Back, Back->Bottom, Bottom->Front
+                colors[4] = temp[0]; // Top gets Front's color
+                colors[1] = temp[4]; // Back gets Top's color
+                colors[5] = temp[1]; // Bottom gets Back's color
+                colors[0] = temp[5]; // Front gets Bottom's color
+                // Left and Right colors stay in same positions
+            } else {
+                // Front->Bottom, Bottom->Back, Back->Top, Top->Front
+                colors[5] = temp[0]; // Bottom gets Front's color
+                colors[1] = temp[5]; // Back gets Bottom's color
+                colors[4] = temp[1]; // Top gets Back's color
+                colors[0] = temp[4]; // Front gets Top's color
+                // Left and Right colors stay in same positions
+            }
+            break;
+            
+        case 1: // Y-axis rotation (top/bottom layers)
+            if (clockwise) {
+                // Front->Right, Right->Back, Back->Left, Left->Front
+                colors[3] = temp[0]; // Right gets Front's color
+                colors[1] = temp[3]; // Back gets Right's color
+                colors[2] = temp[1]; // Left gets Back's color
+                colors[0] = temp[2]; // Front gets Left's color
+                // Top and Bottom colors stay in same positions
+            } else {
+                // Front->Left, Left->Back, Back->Right, Right->Front
+                colors[2] = temp[0]; // Left gets Front's color
+                colors[1] = temp[2]; // Back gets Left's color
+                colors[3] = temp[1]; // Right gets Back's color
+                colors[0] = temp[3]; // Front gets Right's color
+                // Top and Bottom colors stay in same positions
+            }
+            break;
+            
+        case 2: // Z-axis rotation (front/back layers)
+            if (clockwise) {
+                // Left->Top, Top->Right, Right->Bottom, Bottom->Left
+                colors[4] = temp[2]; // Top gets Left's color
+                colors[3] = temp[4]; // Right gets Top's color
+                colors[5] = temp[3]; // Bottom gets Right's color
+                colors[2] = temp[5]; // Left gets Bottom's color
+                // Front and Back colors stay in same positions
+            } else {
+                // Left->Bottom, Bottom->Right, Right->Top, Top->Left
+                colors[5] = temp[2]; // Bottom gets Left's color
+                colors[3] = temp[5]; // Right gets Bottom's color
+                colors[4] = temp[3]; // Top gets Right's color
+                colors[2] = temp[4]; // Left gets Top's color
+                // Front and Back colors stay in same positions
+            }
+            break;
+    }
 }
+
+
 
 void Cubie::draw() {
     glPushMatrix();
@@ -299,6 +361,9 @@ void RubiksCube::rotateLayer(point3f origin, int axis, bool clockwise) {
         newPos.z = round(newPos.z / 1.1f) * 1.1f;
         
         cubie->position = newPos;
+        
+        // IMPORTANT: Rotate the face colors with the cubie's physical rotation
+        cubie->rotateFaceColors(axis, clockwise);
     }
     
     // Update the cube array to reflect new positions

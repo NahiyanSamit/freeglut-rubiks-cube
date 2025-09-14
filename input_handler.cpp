@@ -74,7 +74,6 @@ void handleKeyboard(unsigned char key, int x, int y) {
         // Layer rotations using ZXCVBN keys
         case 'z':
         case 'Z':
-            // Rotate top layer clockwise around Y-axis
             if (rubiksCube && !currentAnimation.active) {
                 startLayerAnimation(rubiksCube->topOrigin, 1, true);
                 cout << "Rotating top layer clockwise" << endl;

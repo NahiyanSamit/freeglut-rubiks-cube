@@ -24,6 +24,7 @@ struct Cubie
 
     Cubie(float px, float py, float pz);
     void draw();
+    void rotateFaceColors(int axis, bool clockwise); // Rotate which face each color is on
 };
 
 struct LayerAnimation {
