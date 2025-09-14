@@ -5,7 +5,7 @@
 Camera* camera = nullptr;
 
 Camera::Camera() {
-    distance = 8.0f;         // Start at a good viewing distance
+    distance = 12.0f;         // Start at a good viewing distance
     azimuth = 45.0f;         // Start at 45 degrees horizontally
     elevation = 30.0f;       // Start looking down slightly
     target = point3f(0.0f, 0.0f, 0.0f);  // Look at cube center
@@ -50,7 +50,7 @@ void Camera::apply() {
 }
 
 void Camera::reset() {
-    distance = 8.0f;
+    distance = 12.0f;
     azimuth = 45.0f;
     elevation = 30.0f;
     target = point3f(0.0f, 0.0f, 0.0f);

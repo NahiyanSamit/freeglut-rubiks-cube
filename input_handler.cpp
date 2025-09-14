@@ -87,21 +87,18 @@ void handleKeyboard(unsigned char key, int x, int y) {
         case 'u': // Up/Top layer
             if (rubiksCube && !currentAnimation.active) {
                 startLayerAnimation(rubiksCube->topOrigin, 1, clockwise);
-                cout << "Rotating top layer " << (clockwise ? "clockwise" : "counter-clockwise") << endl;
             }
             break;
             
         case 'm': // Middle horizontal layer
             if (rubiksCube && !currentAnimation.active) {
                 startLayerAnimation(rubiksCube->middleOrigin, 1, clockwise);
-                cout << "Rotating middle horizontal layer " << (clockwise ? "clockwise" : "counter-clockwise") << endl;
             }
             break;
             
         case 'd': // Down/Bottom layer
             if (rubiksCube && !currentAnimation.active) {
                 startLayerAnimation(rubiksCube->bottomOrigin, 1, clockwise);
-                cout << "Rotating bottom layer " << (clockwise ? "clockwise" : "counter-clockwise") << endl;
             }
             break;
             
@@ -109,21 +106,18 @@ void handleKeyboard(unsigned char key, int x, int y) {
         case 'l': // Left layer
             if (rubiksCube && !currentAnimation.active) {
                 startLayerAnimation(rubiksCube->leftOrigin, 0, clockwise);
-                cout << "Rotating left layer " << (clockwise ? "clockwise" : "counter-clockwise") << endl;
             }
             break;
             
         case 'c': // Center vertical layer
             if (rubiksCube && !currentAnimation.active) {
                 startLayerAnimation(rubiksCube->centerOrigin, 0, clockwise);
-                cout << "Rotating center vertical layer " << (clockwise ? "clockwise" : "counter-clockwise") << endl;
             }
             break;
             
         case 'x': // Right layer (using 'x' since 'r' is reset)
             if (rubiksCube && !currentAnimation.active) {
                 startLayerAnimation(rubiksCube->rightOrigin, 0, clockwise);
-                cout << "Rotating right layer " << (clockwise ? "clockwise" : "counter-clockwise") << endl;
             }
             break;
             
@@ -131,14 +125,12 @@ void handleKeyboard(unsigned char key, int x, int y) {
         case 'f': // Front layer
             if (rubiksCube && !currentAnimation.active) {
                 startLayerAnimation(rubiksCube->frontOrigin, 2, clockwise);
-                cout << "Rotating front layer " << (clockwise ? "clockwise" : "counter-clockwise") << endl;
             }
             break;
             
         case 'b': // Back layer
             if (rubiksCube && !currentAnimation.active) {
                 startLayerAnimation(rubiksCube->backOrigin, 2, clockwise);
-                cout << "Rotating back layer " << (clockwise ? "clockwise" : "counter-clockwise") << endl;
             }
             break;
     }
@@ -156,15 +148,11 @@ void resetCube() {
 }
 
 void printControls() {
-    cout << "\n=== Rubik's Cube Controls (Updated) ===" << endl;
+    cout << "\n=== Rubik's Cube Controls ===" << endl;
     cout << "Mouse:" << endl;
     cout << "  Left click + drag: Orbit camera around cube" << endl;
     cout << "  Mouse wheel: Zoom in/out" << endl;
     cout << "  Right click: Reset camera and cube" << endl;
-    cout << "\nGeneral:" << endl;
-    cout << "  R: Reset camera and cube" << endl;
-    cout << "  H: Show this help" << endl;
-    cout << "  ESC: Exit program" << endl;
     cout << "\nLayer Rotations:" << endl;
     cout << "  Key alone = Clockwise rotation" << endl;
     cout << "  Shift + Key = Counter-clockwise rotation" << endl;
@@ -179,11 +167,6 @@ void printControls() {
     cout << "\nDepth Layers (Z-axis):" << endl;
     cout << "  F: Front layer" << endl;
     cout << "  B: Back layer" << endl;
-    cout << "\nExamples:" << endl;
-    cout << "  U = Top layer clockwise" << endl;
-    cout << "  Shift+U = Top layer counter-clockwise" << endl;
-    cout << "  F = Front layer clockwise" << endl;
-    cout << "  Shift+F = Front layer counter-clockwise" << endl;
     cout << "==========================================\n" << endl;
 }
 
@@ -201,11 +184,8 @@ void updateLayerAnimation() {
             if (rubiksCube) {
                 rubiksCube->rotateLayer(currentAnimation.origin, currentAnimation.axis, currentAnimation.clockwise);
             }
-            
-            cout << "Animation complete!" << endl;
         }
         
-        // Request redraw
         glutPostRedisplay();
     }
 }
@@ -217,10 +197,8 @@ void startLayerAnimation(point3f origin, int axis, bool clockwise) {
         currentAnimation.axis = axis;
         currentAnimation.clockwise = clockwise;
         currentAnimation.currentAngle = 0;
-        currentAnimation.targetAngle = 90; // 90 degrees
+        currentAnimation.targetAngle = 90;
         currentAnimation.speed = 3.0f; // degrees per frame
-        
-        cout << "Starting animation..." << endl;
     }
 }
 

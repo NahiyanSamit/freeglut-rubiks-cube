@@ -28,7 +28,6 @@ void display() {
 }
 
 void timer(int value) {
-    // Continuous timer for smooth animation
     glutPostRedisplay();
     glutTimerFunc(16, timer, 0); // ~60 FPS
 }
@@ -80,7 +79,9 @@ int main(int argc, char** argv) {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
     glutCreateWindow("Rubik's Cube - Camera Mode");
-    
+
+    cout << "Rubik's Cube: \nReset: R\nHelp: H\nExit: ESC" << endl;
+
     initGL();
     
     // Create cube and camera
@@ -98,6 +99,7 @@ int main(int argc, char** argv) {
     glutTimerFunc(16, timer, 0);
     
     glutMainLoop();
+    
     
     delete rubiksCube;
     delete camera;

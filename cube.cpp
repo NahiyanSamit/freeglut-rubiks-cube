@@ -6,7 +6,6 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-// Global variables
 RubiksCube* rubiksCube = nullptr;
 
 // Color RGB values for each face
@@ -30,66 +29,60 @@ Cubie::Cubie(float px, float py, float pz) : position{px, py, pz} {
     colors[5] = GREEN;   
 }
 
+
+// Updates the face colors based on rotation
 void Cubie::rotateFaceColors(int axis, bool clockwise) {
-    // When a cubie physically rotates, its face colors need to rotate to new face positions
-    // This maps how colors move between face positions during rotation
     int temp[6];
     for (int i = 0; i < 6; i++) {
         temp[i] = colors[i];
     }
     
     switch (axis) {
-        case 0: // X-axis rotation (left/right layers)
+        case 0: // X-axis rotation 
             if (clockwise) {
                 // Front->Top, Top->Back, Back->Bottom, Bottom->Front
-                colors[4] = temp[0]; // Top gets Front's color
-                colors[1] = temp[4]; // Back gets Top's color
-                colors[5] = temp[1]; // Bottom gets Back's color
-                colors[0] = temp[5]; // Front gets Bottom's color
-                // Left and Right colors stay in same positions
+                colors[4] = temp[0]; 
+                colors[1] = temp[4]; 
+                colors[5] = temp[1]; 
+                colors[0] = temp[5]; 
             } else {
                 // Front->Bottom, Bottom->Back, Back->Top, Top->Front
-                colors[5] = temp[0]; // Bottom gets Front's color
-                colors[1] = temp[5]; // Back gets Bottom's color
-                colors[4] = temp[1]; // Top gets Back's color
-                colors[0] = temp[4]; // Front gets Top's color
-                // Left and Right colors stay in same positions
+                colors[5] = temp[0];
+                colors[1] = temp[5];
+                colors[4] = temp[1];
+                colors[0] = temp[4];
             }
             break;
             
-        case 1: // Y-axis rotation (top/bottom layers)
+        case 1: // Y-axis rotation
             if (clockwise) {
                 // Front->Right, Right->Back, Back->Left, Left->Front
-                colors[3] = temp[0]; // Right gets Front's color
-                colors[1] = temp[3]; // Back gets Right's color
-                colors[2] = temp[1]; // Left gets Back's color
-                colors[0] = temp[2]; // Front gets Left's color
-                // Top and Bottom colors stay in same positions
+                colors[3] = temp[0]; 
+                colors[1] = temp[3];
+                colors[2] = temp[1];
+                colors[0] = temp[2];
             } else {
                 // Front->Left, Left->Back, Back->Right, Right->Front
-                colors[2] = temp[0]; // Left gets Front's color
-                colors[1] = temp[2]; // Back gets Left's color
-                colors[3] = temp[1]; // Right gets Back's color
-                colors[0] = temp[3]; // Front gets Right's color
-                // Top and Bottom colors stay in same positions
+                colors[2] = temp[0]; 
+                colors[1] = temp[2]; 
+                colors[3] = temp[1]; 
+                colors[0] = temp[3]; 
             }
             break;
             
-        case 2: // Z-axis rotation (front/back layers)
+        case 2: // Z-axis rotation
             if (clockwise) {
                 // Left->Top, Top->Right, Right->Bottom, Bottom->Left
-                colors[4] = temp[2]; // Top gets Left's color
-                colors[3] = temp[4]; // Right gets Top's color
-                colors[5] = temp[3]; // Bottom gets Right's color
-                colors[2] = temp[5]; // Left gets Bottom's color
-                // Front and Back colors stay in same positions
+                colors[4] = temp[2]; 
+                colors[3] = temp[4]; 
+                colors[5] = temp[3]; 
+                colors[2] = temp[5]; 
             } else {
                 // Left->Bottom, Bottom->Right, Right->Top, Top->Left
-                colors[5] = temp[2]; // Bottom gets Left's color
-                colors[3] = temp[5]; // Right gets Bottom's color
-                colors[4] = temp[3]; // Top gets Right's color
-                colors[2] = temp[4]; // Left gets Top's color
-                // Front and Back colors stay in same positions
+                colors[5] = temp[2];
+                colors[3] = temp[5];
+                colors[4] = temp[3];
+                colors[2] = temp[4];
             }
             break;
     }
@@ -227,7 +220,6 @@ void RubiksCube::initializeCube() {
 }
 
 void RubiksCube::draw() {
-    // Check if there's an active animation
     extern LayerAnimation currentAnimation;
     
     if (currentAnimation.active) {
@@ -266,13 +258,13 @@ void RubiksCube::draw() {
         // Draw the animated layer with corrected angle direction for each axis
         float angle;
         switch (currentAnimation.axis) {
-            case 0: // X-axis - needs sign flip for visual consistency
+            case 0: // X-axis
                 angle = currentAnimation.clockwise ? -currentAnimation.currentAngle : currentAnimation.currentAngle;
                 break;
-            case 1: // Y-axis - original direction is correct
+            case 1: // Y-axis
                 angle = currentAnimation.clockwise ? currentAnimation.currentAngle : -currentAnimation.currentAngle;
                 break;
-            case 2: // Z-axis - needs sign flip for visual consistency
+            case 2: // Z-axis 
                 angle = currentAnimation.clockwise ? -currentAnimation.currentAngle : currentAnimation.currentAngle;
                 break;
             default:
@@ -381,7 +373,6 @@ void RubiksCube::rotateLayer(point3f origin, int axis, bool clockwise) {
     }
     
     // Update the cube array to reflect new positions
-    // First, clear the cube array
     std::vector<std::vector<std::vector<Cubie*>>> newCube(3);
     for (int i = 0; i < 3; i++) {
         newCube[i].resize(3);
@@ -478,11 +469,6 @@ void RubiksCube::drawAnimatedLayer(point3f origin, int axis, float angle) {
     }
     
     glPopMatrix();
-}
-
-void RubiksCube::drawWithAnimation() {
-    // This will be called from input_handler when there's an active animation
-    // We'll draw non-rotating cubies normally and rotating cubies with animation
 }
 
 void RubiksCube::resetCube() {

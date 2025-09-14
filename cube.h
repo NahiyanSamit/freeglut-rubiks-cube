@@ -5,7 +5,6 @@
 #include <vector>
 #include "camera.h"
 
-// Color constants for Rubik's cube faces
 enum CubeColor
 {
     WHITE = 0,
@@ -16,7 +15,7 @@ enum CubeColor
     GREEN
 };
 
-// Structure to represent a single small cube (cubie)
+// Small parts of the Rubik's cube
 struct Cubie
 {
     point3f position;
@@ -33,14 +32,14 @@ struct LayerAnimation {
     int axis;           
     bool clockwise;     
     float currentAngle; 
-    float targetAngle;  // This member is missing in cube.h
-    float speed;        // This member is missing in cube.h
+    float targetAngle;
+    float speed;       
     
     LayerAnimation() : active(false), origin(0,0,0), axis(0), clockwise(true), 
                       currentAngle(0), targetAngle(90), speed(3.0f) {}
 };
 
-// Main Rubik's cube class (simplified - no rotation methods)
+// Main Rubik's cube class
 class RubiksCube
 {
 private:
@@ -66,7 +65,6 @@ public:
 
     void rotateLayer(point3f origin, int axis, bool clockwise);
     void drawAnimatedLayer(point3f origin, int axis, float angle);
-    void drawWithAnimation();
 };
 
 extern RubiksCube *rubiksCube;
